@@ -4,7 +4,6 @@ from langchain_community.query_constructors.qdrant import QdrantTranslator
 
 class CustomSelfQueryRetriever(SelfQueryRetriever):
     def _add_genre_filter_to_structured_query(self, structured_query, query_text, possible_genres):
-      print("<<<<<<< access this")
       genre_comparisons = []
       lowered_query = query_text.lower()
 
