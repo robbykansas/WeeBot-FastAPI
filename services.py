@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class RecommendationService:
-    def get_recommendations(self, input_text: str, vectordb: Qdrant) -> list:
+    def get_recommendations(self, input_text: str, vectordb: Qdrant):
         metadata_field_info = [
             AttributeInfo(name="title_romaji", type="string", description="Title of anime"),
             AttributeInfo(name="title_english", type="string", description="Title of anime in english"),
@@ -41,12 +41,44 @@ class RecommendationService:
         )
 
         query = input_text
-        docs = retriever.invoke(query, k=5)
-        res = [
-            doc.metadata for doc in docs
-        ]
+        try:
+            docs = retriever.invoke(query, k=5)
 
-        return res
+            filter = []
+            for doc in docs:
+                title = doc.metadata.get("title_english") or doc.metadata.get("title_romaji")
+                description = doc.metadata.get("description", "")
+                genres = doc.metadata.get("genres", [])
+                id = doc.metadata.get("id", None)
+                idMal = doc.metadata.get("idMal", None)
+                format = doc.metadata.get("format", "")
+                averageScore = doc.metadata.get("averageScore", 0)
+                popularity = doc.metadata.get("popularity", 0)
+                cover = doc.metadata.get("coverImage_large", "")
+
+                filter.append({
+                    "title": title,
+                    "description": description,
+                    "genres": genres,
+                    "id": id,
+                    "idMal": idMal,
+                    "format": format,
+                    "averageScore": averageScore,
+                    "popularity": popularity,
+                    "cover": cover
+                })
+
+        except Exception as e:
+            return {
+                "recommendations": [],
+                "error": str(e)
+            }
+
+        return {
+            "recommendations": filter,
+            "error": None
+        }
+    
         # print(docs, "<<<<")
         # base_titles = [
         #     doc.metadata.get("title_english") or doc.metadata.get("title_romaji")
