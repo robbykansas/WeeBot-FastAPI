@@ -42,7 +42,7 @@ class RecommendationService:
 
         query = input_text
         try:
-            docs = retriever.invoke(query, k=5)
+            docs = retriever.invoke(query, k=20)
 
             filter = []
             for doc in docs:
@@ -78,27 +78,3 @@ class RecommendationService:
             "recommendations": filter,
             "error": None
         }
-    
-        # print(docs, "<<<<")
-        # base_titles = [
-        #     doc.metadata.get("title_english") or doc.metadata.get("title_romaji")
-        #     for doc in docs
-        # ]
-        # print(base_titles, "base titles")
-        # related_docs = []
-
-        # for title in base_titles:
-        #     title = title.strip().lower()
-        #     filter_romaji = {"title_romaji": title}
-        #     filter_english = {"title_english": title}
-
-        #     results_romaji = retriever.vectorstore.similarity_search(
-        #         query="",  # optional or dummy, since we're doing a metadata-only filter
-        #         filter=filter_romaji
-        #     )
-        #     results_english = retriever.vectorstore.similarity_search(
-        #         query="",  # dummy
-        #         filter=filter_english
-        #     )
-
-        #     related_docs.extend(results_romaji + results_english)
