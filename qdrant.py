@@ -35,6 +35,7 @@ async def init_vectordb():
     )
 
     loc="./hf_embed"
+    os.makedirs(loc, exist_ok=True)
 
     embedding_function = HuggingFaceEmbeddings(
         model_name=load_embedding(loc),
