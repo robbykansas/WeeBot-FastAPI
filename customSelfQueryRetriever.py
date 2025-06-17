@@ -4,37 +4,37 @@ from langchain_community.query_constructors.qdrant import QdrantTranslator
 
 class CustomSelfQueryRetriever(SelfQueryRetriever):
     def _add_genre_filter_to_structured_query(self, structured_query, query_text, possible_genres):
-      genre_comparisons = []
-      lowered_query = query_text.lower()
+        genre_comparisons = []
+        lowered_query = query_text.lower()
 
-      for genre in possible_genres:
-          if genre in lowered_query:
-              genre_comparisons.append(
-                  Comparison(
-                      comparator=Comparator.EQ,
-                      attribute="genres",
-                      value=genre.capitalize()
-                  )
-              )
+        for genre in possible_genres:
+            if genre in lowered_query:
+                genre_comparisons.append(
+                    Comparison(
+                        comparator=Comparator.EQ,
+                        attribute="genres",
+                        value=genre.capitalize()
+                    )
+                )
 
-      if genre_comparisons:
-          if len(genre_comparisons) == 1:
-              genre_filter = genre_comparisons[0]
-          else:
-              genre_filter = Operation(
-                  operator=Operator.OR,
-                  arguments=genre_comparisons
-              )
+        if genre_comparisons:
+            if len(genre_comparisons) == 1:
+                genre_filter = genre_comparisons[0]
+            else:
+                genre_filter = Operation(
+                    operator=Operator.OR,
+                    arguments=genre_comparisons
+                )
 
-          if structured_query.filter:
-              structured_query.filter = Operation(
-                  operator=Operator.AND,
-                  arguments=[structured_query.filter, genre_filter]
-              )
-          else:
-              structured_query.filter = genre_filter
+            if structured_query.filter:
+                structured_query.filter = Operation(
+                    operator=Operator.AND,
+                    arguments=[structured_query.filter, genre_filter]
+                )
+            else:
+                structured_query.filter = genre_filter
 
-      return structured_query
+        return structured_query
     def invoke(self, input: str | dict, *, config=None, k: int): 
         if isinstance(input, str):
             query = input
@@ -55,8 +55,8 @@ class CustomSelfQueryRetriever(SelfQueryRetriever):
         
         # Define default filters
         default_filters = [
-            Comparison(comparator=Comparator.GTE, attribute="popularity", value=50000),
-            Comparison(comparator=Comparator.GTE, attribute="averageScore", value=50),
+            Comparison(comparator=Comparator.GTE, attribute="popularity", value=30000),
+            Comparison(comparator=Comparator.GTE, attribute="averageScore", value=40),
         ]
 
         # If no filter exists, combine all defaults
