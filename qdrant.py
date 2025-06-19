@@ -49,7 +49,7 @@ async def init_vectordb():
 
     # loc="./hf_embed"
     # os.makedirs(loc, exist_ok=True)
-    jina_api_key = "jina_d0c55237ee3d48e4971f01af99a582b3293BUJC1aiMpOz46tlPs3InYUAij"
+    jina_api_key = os.getenv('JINA_API_KEY')
     jina_model = "jina-embeddings-v3"
 
     jina_embedder = JinaAIEmbedding(api_key=jina_api_key, model=jina_model)
