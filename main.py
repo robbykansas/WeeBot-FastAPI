@@ -25,6 +25,8 @@ app = FastAPI(lifespan=lifespan)
 
 Origin = [
     "http://localhost:3000",
+    "https://robbykansas.github.io",
+    "https://weebot.dedyn.io"
 ]
 
 app.add_middleware(
